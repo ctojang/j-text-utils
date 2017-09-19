@@ -53,11 +53,9 @@ public class TextTableRenderer implements TableRenderer {
 		// Generate a format string for each column and calc totalLength
 		int totLength = resolveFormats();
 
-		String headerStartSep = StringUtils.repeat("_", totLength + tableModel.getColumnCount() * 2);
 		ps.print(indentStr);
 		indentAccordingToNumbering(ps, indexFormat1);
-		ps.println(headerStartSep);
-
+		ps.println(separator);
 		ps.print(indentStr);
 		indentAccordingToNumbering(ps, indexFormat1);
 		for (int j = 0; j < tableModel.getColumnCount(); j++) {
@@ -65,11 +63,8 @@ public class TextTableRenderer implements TableRenderer {
 		}
 
 		indentAccordingToNumbering(ps, indexFormat1);
-		String headerSep = StringUtils.repeat("=", totLength + tableModel.getColumnCount() * 2 - 1);
 		ps.print(indentStr);
-		ps.print("|");
-		ps.print(headerSep);
-		ps.println("|");
+		ps.println(separator);
 
 		// Print 'em out
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
@@ -86,6 +81,9 @@ public class TextTableRenderer implements TableRenderer {
 				printValue(ps, i, j, false);
 			}
 		}
+		indentAccordingToNumbering(ps, indexFormat1);
+		ps.print(indentStr);
+		ps.println(separator);
 	}
 
 	private void resolveColumnLengths() {
@@ -105,15 +103,12 @@ public class TextTableRenderer implements TableRenderer {
 
 	private String resolveSeparator(int[] lengths) {
 		StringBuilder sepSb = new StringBuilder();
-
+		sepSb.append("+");
 		for (int j = 0; j < tableModel.getColumnCount(); j++) {
-			if (j == 0) {
-				sepSb.append("|");
-			}
 			lengths[j] = Math.max(tableModel.getColumnName(j).length(), lengths[j]);
 			// add 1 because of the leading space in each column
 			sepSb.append(StringUtils.repeat("-", lengths[j] + 1));
-			sepSb.append("|");
+			sepSb.append("+");
 		}
 		String separator = sepSb.toString();
 		return separator;
